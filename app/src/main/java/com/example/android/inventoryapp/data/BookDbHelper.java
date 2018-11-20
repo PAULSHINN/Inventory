@@ -31,14 +31,21 @@ public class BookDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
     }
 
+    /**
+     *  Upgrades Database
+     */
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         if (newVersion > oldVersion) {
             dropTable();
         }
-        // The database is still at version 1, so there's nothing to do be done here.
     }
+
+    /**
+     *  Drops table during upgrade
+     */
 
     public void dropTable() {
 

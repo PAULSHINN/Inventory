@@ -101,7 +101,7 @@ public class BookProvider extends ContentProvider {
 
         // Notify all listeners that the data has changed for the pet content URI
         getContext().getContentResolver().notifyChange(uri, null);
-        Toast.makeText(getContext(), " 1 row inserted into database.", Toast.LENGTH_SHORT).show();
+        showToast("Information saved successfully.");
 
         // Return the new URI with the ID (of the newly inserted row) appended at the end
         return ContentUris.withAppendedId(uri, id);
@@ -138,7 +138,7 @@ public class BookProvider extends ContentProvider {
 
             if (name == null) {
 
-                Toast.makeText(getContext(), "1 row inserted into database.", Toast.LENGTH_SHORT).show();
+                showToast("Name cannot be blank.");
             }
         }
 
@@ -147,7 +147,7 @@ public class BookProvider extends ContentProvider {
 
             if (supplierName == null) {
 
-                Toast.makeText(getContext(), "1 row inserted into database.", Toast.LENGTH_SHORT).show();
+                showToast("Supplier cannot be blank.");
             }
         }
 
@@ -155,7 +155,8 @@ public class BookProvider extends ContentProvider {
             String supplierPhone = values.getAsString(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE);
 
             if (supplierPhone == null) {
-                throw new IllegalArgumentException("Book requires name.");
+
+                showToast("Phone number cannot be blank.");
             }
         }
 
@@ -163,7 +164,8 @@ public class BookProvider extends ContentProvider {
             Double price = values.getAsDouble(BookContract.BookEntry.COLUMN_PRICE);
 
             if (price == null) {
-                throw new IllegalArgumentException("Book requires price.");
+
+                showToast("Price cannot be blank.");
             }
         }
 
@@ -171,7 +173,8 @@ public class BookProvider extends ContentProvider {
             Integer quantity = values.getAsInteger(BookContract.BookEntry.COLUMN_QUANTITY);
 
             if (quantity == null) {
-                throw new IllegalArgumentException("Book requires quantity.");
+
+                showToast("Quantity cannot be blank.");
             }
         }
 
