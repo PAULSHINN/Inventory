@@ -32,7 +32,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  Upgrades Database
+     * Upgrades Database
      */
 
     @Override
@@ -44,7 +44,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  Drops table during upgrade
+     * Drops table during upgrade
      */
 
     public void dropTable() {
