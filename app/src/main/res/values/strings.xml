@@ -70,8 +70,17 @@
     <string name="category_measurement">Measurement</string>
 
     <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_book_price">Price</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_quantity">Quantity</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
     <string name="hint_book_name">Name</string>
 
     <!-- Label for the pet's breed if the breed is unknown [CHAR LIMIT=20] -->
     <string name="unknown_book">Unknown book</string>
+    <string name="hint_supplier_name">hint_supplier_name</string>
+    <string name="hint_supplier_phone">hint_supplier_phone</string>
+    <string name="unit_pet_weight">unit_pet_weight</string>
 </resources>
