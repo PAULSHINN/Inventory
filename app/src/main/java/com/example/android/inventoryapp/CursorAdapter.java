@@ -42,8 +42,8 @@ public class CursorAdapter extends android.widget.CursorAdapter {
         int supplierPhoneColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE);
         // Read the book attributes from the Cursor for the current book
         String productName = cursor.getString(productNameColumnIndex);
-        String price = cursor.getString(priceColumnIndex);
-        String quantity = cursor.getString(quantityColumnIndex);
+        double price = cursor.getDouble(priceColumnIndex);
+        int quantity = cursor.getInt(quantityColumnIndex);
         String supplierName = cursor.getString(supplierNameColumnIndex);
         String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
         // If the book breed is empty string or null, then use some default text
@@ -54,12 +54,10 @@ public class CursorAdapter extends android.widget.CursorAdapter {
 
         // Update the TextViews with the attributes for the current book
         productNameTextView.setText(productName);
-        priceTextView.setText(price);
-        quantityTextView.setText(quantity);
+        priceTextView.setText(String.valueOf(price));
+        quantityTextView.setText(String.valueOf(quantity));
         supplierNameTextView.setText(supplierName);
         supplierPhoneTextView.setText(supplierPhone);
-
-
     }
 }
 

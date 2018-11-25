@@ -98,6 +98,7 @@ public class CatalogActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_insert_dummy_data:
                 insertBook();
+                 return true;
             case R.id.action_delete_all_entries:
                 deleteAllBooks();
         }
