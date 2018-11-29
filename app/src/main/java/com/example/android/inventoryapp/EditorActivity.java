@@ -28,28 +28,44 @@ import com.example.android.inventoryapp.data.BookContract;
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the book data loader */
+    /**
+     * Identifier for the book data loader
+     */
     private static final int EXISTING_BOOK_LOADER = 0;
 
-    /** Content Uri for the existing book (null if it's a new book) */
+    /**
+     * Content Uri for the existing book (null if it's a new book)
+     */
     private Uri mCurrentBookUri;
 
-    /** EditText field to enter the book's name */
+    /**
+     * EditText field to enter the book's name
+     */
     private EditText mProductNameEditText;
 
-    /** EditText field to enter the book's price */
+    /**
+     * EditText field to enter the book's price
+     */
     private EditText mPriceEditText;
 
-    /** EditText field to enter the book's quantity */
+    /**
+     * EditText field to enter the book's quantity
+     */
     private EditText mQuantityEditText;
 
-    /** EditText field to enter the book's supplier name */
+    /**
+     * EditText field to enter the book's supplier name
+     */
     private EditText mSupplierNameEditText;
 
-    /** EditText field to enter the book's supplier phone */
+    /**
+     * EditText field to enter the book's supplier phone
+     */
     private EditText mSupplierPhoneEditText;
 
-    /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
+    /**
+     * Boolean flag that keeps track of whether the book has been edited (true) or not (false)
+     */
     private Boolean mBookHasChanged = false;
 
     /**
@@ -82,7 +98,7 @@ public class EditorActivity extends AppCompatActivity implements
             setTitle(getString(R.string.editor_activity_title_new_book));
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+            // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
 
         } else {
@@ -109,6 +125,46 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
+    }
+
+    public boolean validateBook() {
+        // Read from input fields. Use trim to eliminate leading or trailing white space.
+        String titleString = mProductNameEditText.getText().toString().trim();
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        String priceString = mPriceEditText.getText().toString().trim();
+        String supplierString = mSupplierNameEditText.getText().toString().trim();
+        String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
+
+        // If quantity is left empty, set to zero
+        if (TextUtils.isEmpty(quantityString)) {
+            // Show the error in a toast message.
+            mQuantityEditText.setText(String.valueOf(0));
+        }
+
+        // Quick validation
+        if (TextUtils.isEmpty(titleString)) {
+            // Show the error in a toast message.
+            Toast.makeText(this, getString(R.string.toast_required_title),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(priceString)) {
+            // Show the error in a toast message.
+            Toast.makeText(this, getString(R.string.toast_required_price),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(supplierString)) {
+            // Show the error in a toast message.
+            Toast.makeText(this, getString(R.string.toast_required_supplier),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(supplierPhoneString)) {
+            // Show the error in a toast message.
+            Toast.makeText(this, getString(R.string.toast_required_phone),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -142,7 +198,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(BookContract.BookEntry.COLUMN_PRICE, priceString);
         values.put(BookContract.BookEntry.COLUMN_QUANTITY, quantityString);
         values.put(BookContract.BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-        values.put(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE, priceString);
+        values.put(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
 
         // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
@@ -198,7 +254,9 @@ public class EditorActivity extends AppCompatActivity implements
         // If this is a new book, hide the "Delete" menu item.
         if (mCurrentBookUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
+            MenuItem callItem = menu.findItem(R.id.action_call);
             menuItem.setVisible(false);
+            callItem.setVisible(false);
         }
         return true;
     }
@@ -210,14 +268,25 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save book to database
-                saveBook();
-                // Exit activity
-                finish();
-                return true;
-            // Respond to a click on the "Delete" menu option
+                if (validateBook()) {
+                    saveBook();
+                    // Exit activity
+                    finish();
+
+                    return true;
+                } else {
+
+                    return false;
+                }
+                // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
                 // Pop up confirmation dialog for deletion
                 showDeleteConfirmationDialog();
+                return true;
+            // Respond to a click on the "Delete" menu option
+            case R.id.action_call:
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
+                startActivity(call);
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -287,7 +356,7 @@ public class EditorActivity extends AppCompatActivity implements
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentBookUri,         // Query the content URI for the current pet
+                mCurrentBookUri,         // Query the content URI for the current book
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments

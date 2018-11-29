@@ -3,11 +3,9 @@ package com.example.android.inventoryapp;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.example.android.inventoryapp.data.BookContract;
 
 public class CatalogActivity extends AppCompatActivity implements
@@ -63,6 +62,7 @@ public class CatalogActivity extends AppCompatActivity implements
         // Kick off the loader
         getSupportLoaderManager().initLoader(URL_LOADER, null, this);
     }
+
     /**
      * Helper method to delete all books in the database.
      */
@@ -71,14 +71,25 @@ public class CatalogActivity extends AppCompatActivity implements
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from book database");
     }
 
+    /**
+     * Helper method to insert books in the database.
+     */
     private void insertBook() {
+        Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Helper method to insert dummy data into the database.
+     */
+    private void insertDummyData() {
 
         // Create a ContentValues object where column names are the keys,
         // and Toto's book attributes are the values.
         ContentValues values = new ContentValues();
         values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, "I am the cheese.");
         values.put(BookContract.BookEntry.COLUMN_PRICE, 11.99);
-        values.put(BookContract.BookEntry.COLUMN_QUANTITY, 45);
+        values.put(BookContract.BookEntry.COLUMN_QUANTITY, 3);
         values.put(BookContract.BookEntry.COLUMN_SUPPLIER_NAME, "Barnes and Noble");
         values.put(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE, "(555) 555-5555");
 
@@ -87,6 +98,7 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu options from the res/menu/menu_catalog.xml file.
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_catalog, menu);
@@ -96,9 +108,13 @@ public class CatalogActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_insert_dummy_data:
+
+            case R.id.action_insert_new_data:
                 insertBook();
-                 return true;
+                return true;
+            case R.id.action_insert_dummy_data:
+                insertDummyData();
+                return true;
             case R.id.action_delete_all_entries:
                 deleteAllBooks();
         }
@@ -118,7 +134,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 BookContract.BookEntry.COLUMN_SUPPLIER_PHONE,
         };
 
-         return new CursorLoader(this, BookContract.BookEntry.CONTENT_URI, projection, null, null, null);
+        return new CursorLoader(this, BookContract.BookEntry.CONTENT_URI, projection, null, null, null);
     }
 
     @Override
@@ -129,7 +145,7 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-            // Loader reset, so we can clear out our existing data.
+        // Loader reset, so we can clear out our existing data.
         mCursorAdapter.swapCursor(null);
     }
 }

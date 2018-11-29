@@ -11,7 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * {@link ContentProvider} for Pets app.
+ * {@link ContentProvider} for Books app.
  */
 public class BookProvider extends ContentProvider {
 
@@ -91,7 +91,7 @@ public class BookProvider extends ContentProvider {
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
+        // Insert the new book with the given values
         long id = database.insert(BookContract.BookEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
 
@@ -100,7 +100,7 @@ public class BookProvider extends ContentProvider {
             return null;
         }
 
-        // Notify all listeners that the data has changed for the pet content URI
+        // Notify all listeners that the data has changed for the book content URI
         getContext().getContentResolver().notifyChange(uri, null);
         showToast("Information saved successfully.");
 
@@ -138,7 +138,6 @@ public class BookProvider extends ContentProvider {
             String name = values.getAsString(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
 
             if (name == null) {
-
                 showToast("Name cannot be blank.");
             }
         }
@@ -147,7 +146,6 @@ public class BookProvider extends ContentProvider {
             String supplierName = values.getAsString(BookContract.BookEntry.COLUMN_SUPPLIER_NAME);
 
             if (supplierName == null) {
-
                 showToast("Supplier cannot be blank.");
             }
         }
@@ -156,7 +154,6 @@ public class BookProvider extends ContentProvider {
             String supplierPhone = values.getAsString(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE);
 
             if (supplierPhone == null) {
-
                 showToast("Phone number cannot be blank.");
             }
         }
@@ -165,7 +162,6 @@ public class BookProvider extends ContentProvider {
             Double price = values.getAsDouble(BookContract.BookEntry.COLUMN_PRICE);
 
             if (price == null) {
-
                 showToast("Price cannot be blank.");
             }
         }
@@ -174,7 +170,6 @@ public class BookProvider extends ContentProvider {
             Integer quantity = values.getAsInteger(BookContract.BookEntry.COLUMN_QUANTITY);
 
             if (quantity == null) {
-
                 showToast("Quantity cannot be blank.");
             }
         }
@@ -220,7 +215,6 @@ public class BookProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
-
         // If 1 or more rows were deleted, then notify all listeners that the data at the
         // given URI has changed
         if (rowsDeleted != 0) {
@@ -248,7 +242,6 @@ public class BookProvider extends ContentProvider {
     }
 
     public void showToast(String message) {
-
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
